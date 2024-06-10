@@ -1,5 +1,5 @@
 // Supporting Types/Enums
-enum StandardPeriod {
+export enum StandardPeriod {
     "Week" = "Week",
     "Fortnight" = "Fortnight",
     "Month" = "Month",
@@ -8,13 +8,13 @@ enum StandardPeriod {
 }
 
 // Request
-type GenerateAmortisationScheduleRequest = {
+export type GenerateAmortisationScheduleRequest = {
 	loanPrincipal: number;
 	loanDuration: number;
 }
 
 // Response
-type AmortisationScheduleResponse = {
+export type AmortisationScheduleResponse = {
     loanPrincipal: number;
     annualLoanInterestRate: number;
     loanTermYears: number;
@@ -23,7 +23,7 @@ type AmortisationScheduleResponse = {
     schedule: StandardAmortisationScheduleRow[];
 };
 
-type StandardAmortisationScheduleRow = {
+export type StandardAmortisationScheduleRow = {
     period: number;
     estimatedPayment: number;
     estimatedInterest: number;
