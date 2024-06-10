@@ -16,7 +16,7 @@ export const calculateAmortisationSchedule = async (request: GenerateAmortisatio
 
   // Calculate monthly payment using the using the amortisation formular
   const monthlyPayment = balance * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
-  
+
   let cumulativeInterest = 0;
   const schedule: StandardAmortisationScheduleRow[] = [];
   
@@ -31,21 +31,25 @@ export const calculateAmortisationSchedule = async (request: GenerateAmortisatio
 
     schedule.push({
       period,
-      estimatedPayment: monthlyPayment,
-      estimatedInterest: interestPayment,
-      estimatedCumulativeInterest: cumulativeInterest,
-      estimatedPrincipal: principalPayment,
-      estimatedBalance: balance
+      estimatedPayment: roundToXDecimals(monthlyPayment, 2),
+      estimatedInterest: roundToXDecimals(interestPayment, 2),
+      estimatedCumulativeInterest: roundToXDecimals(cumulativeInterest,2),
+      estimatedPrincipal: roundToXDecimals(principalPayment, 2),
+      estimatedBalance: roundToXDecimals(balance, 2)
     });
   }
 
   return {
     loanPrincipal: request.loanPrincipal,
-    annualLoanInterestRate: interestRate,
+    annualLoanInterestRate: roundToXDecimals(interestRate, 6),
     loanTermYears: request.loanDuration,
-    loanRepayment: monthlyPayment,
+    loanRepayment: roundToXDecimals(monthlyPayment, 2), // round to 2 decimal places. easier to test
     repaymentFrequency: StandardPeriod.Month,
     schedule
   };
 };
 
+
+function roundToXDecimals(num: number, decimalPoint: number): number {
+  return parseFloat(num.toFixed(decimalPoint));
+}
